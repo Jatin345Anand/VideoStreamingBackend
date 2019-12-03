@@ -1,0 +1,14 @@
+body{
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    background-color:yellow; 
+  color: brown; 
+    text-align: center;
+}
+thead{
+    font-weight: bold;
+}
+.col .row{
+    margin: -2%;
+}
