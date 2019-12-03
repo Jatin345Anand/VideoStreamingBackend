@@ -17,7 +17,7 @@ var fs  = require('fs');
   , es = require('event-stream');
 
 var lineNr = 0;
-
+// 'contextbi_cgp_v947.csv.tar' size is 17GB
 var s = fs.createReadStream('contextbi_cgp_v947.csv.tar')
   .pipe(es.split())
   .pipe(es.mapSync(function(line){
