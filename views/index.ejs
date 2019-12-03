@@ -2,42 +2,65 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Node File Upload</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-    <!-- Compiled and minified JavaScript -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Node File Upload</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="./CSS/design.css">
+  <!-- Compiled and minified JavaScript -->
 
 </head>
 
 <body>
-    <div class="container">
-        <h1>
-           File Upload
-        </h1>
-        <%= typeof msg != 'undefined' ? msg : ''%>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-                <div class="file-field input-field">
-                  <div class="btn grey">
-                    <span>File</span>
-                    <input name="myImage" type="file">
-                  </div>
-                  <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
-                  </div>
-                </div>
-                <button type="submit" class="btn" >UPLOAD</button>
-            <br>
-            <img src="<%= typeof file != 'undefined' ? file : ''%>" alt="" 
-            class="img-responsive"
-            srcset="">  
-            </form>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- <h1>This is Response</h1> -->
+  <div class="container">
+    <h4>
+      GAS APP | MULTIPLE FILES CRUD APP | GOOGLE DRIVE
+    </h4>
+    <br>
+    <%= typeof msg != 'undefined' ? msg : ''%>
+    
+    <form action="/upload" method="POST" enctype="multipart/form-data" >
+      <div  class="file-field input-field">
+        <div class="btn grey">
+          <span>File</span>
+          <input name="myImage" type="file">
+        </div>
+        <div class="file-path-wrapper">
+          <input  class="file-path validate" type="text">
+        </div>
+      </div>
+      <br>
+      <button type="submit" class="btn" value="upload" name="upload">UPLOAD</button>
+    </form>
+    <form action="/delete" method="POST" >
+      <div class="row">
+          <div class="input-field col s12">
+            <input id="password" type="text" name="fn" class="validate">
+            <label for="password">File Name</label>
+          </div>
+        </div>
+       
+        <div class="row">
+            <div class="input-field col s12">
+              <input id="password" type="text" name="fid" class="validate">
+              <label for="password">File ID in Google Drive</label>
+            </div>
+          </div>
+       
+      
+      
+
+      <br>
+      &nbsp; <button type="submit" class="btn" name="delete" value="downl">DOWNLOAD</button>
+      &nbsp; <button type="submit" class="btn" name="read" value="read">READ/ GET ALL FILES FROM DRIVE</button>
+      <br>
+      <img src="<%= typeof file != 'undefined' ? file : ''%>" alt="" class="img-responsive" srcset="">
+    </form>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- <h1>This is Response</h1> -->
 </body>
 
 </html>

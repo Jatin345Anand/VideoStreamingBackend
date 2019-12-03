@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const ejs = require('ejs');
 const path = require('path');
+const bodyparser = require('body-parser');
 const CRUDforGoogleDrive = require('./models/GoogleApisOperations');
 // Set Storage Engine
 const Storage = multer.diskStorage({
@@ -39,6 +40,7 @@ function checkFileType(file, cb) {
     const filetypes = /jpeg|jpg|png|gif/;
     // const filetypes = /jpeg|jpg|png|pdf|java|csv|js|py/;
     // Check ext
+    console.log('file is ',file);
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     // Check mime.
     const mimetype = filetypes.test(file.mimetype);
@@ -53,13 +55,37 @@ function checkFileType(file, cb) {
 // Init App
 const app = express();
 // EJS
+
 app.set('view engine', 'ejs');
+// client view
 app.use(express.static('./public'));
+
 app.get('/', (req, res) => {
     res.render('index');
-})
+});
+// body input
+app.use(bodyparser.urlencoded({extended:false}));
+app.use(bodyparser.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+app.post('/delete',(req,res)=>{
+console.log(' delete body',req.body);
+// console.log('file',req.file);
+if(req.body.read){
+   Files = CRUDforGoogleDrive.ReadAllFiles();
+   if(Files.length){
+    console.log('in /delete',Files);
+   }
+   
+//    console.log(typeof Files);
+}
+if(req.body.delete){
+   CRUDforGoogleDrive.DeleteOneFile(req.body.fn,req.body.fid);
+}
+});
 app.post('/upload', (req, res) => {
     // res.send('sent');
+    console.log('req,body...');
     upload(req, res, (err) => {
         if (err) {
             console.log('Error occured',err);
