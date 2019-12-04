@@ -5,7 +5,7 @@ const path  = require('path');
 // If modifying these scopes, delete token.json.
 
 // const SCOPES = ['https://www.googleapis.com/auth/drive'];
-const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/drive'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -27,18 +27,10 @@ const DrivesDetails = [
   }
 ];
 const DrivesTokenDetails = [
-  {
-    "access_token":"ya29.Il-zB_B59DpUdvR8MItyC1NaUa45niOdfcBljM0QNa5fXBFqMLJvx17O6fcCS27QF-ixBAK31PZ_mpKFv2GDNwS16aZ6Zj3g-x8WN6jey9PtdZ89K_VKgfrEdsKRg0v32w","refresh_token":"1//0gpP3A5TYKv4MCgYIARAAGBASNwF-L9IrzL5ch2czt6MiLBCn6PCGORKHhc54GcCsTJSM59dvyc3fVGdmOg2oR-5N_V5_z2V2jAs","scope":"https://www.googleapis.com/auth/drive","token_type":"Bearer","expiry_date":1575119684401
-  },
-  { 
-    "access_token":"ya29.Il-zB8FIV1qkRCI4hqH8aqO9mHv2hEwO6MK4u6iMrpXkyCF3EMbfSupByNVc4rHB4oaEjM-jYWEkWY-fCI3-gd8ci4uw_0EsPKwNbvu2AGBSbLVqG5KWmgDtROd_GAwXNA","refresh_token":"1//0gaxGwJlvYgnbCgYIARAAGBASNwF-L9Ira50RmWpG6zwzIngDtU62s2LnPgs3r0OuzlYIL2rUtZYVYdyg95793sJ0upPt7LX-myg","scope":"https://www.googleapis.com/auth/drive.metadata.readonly","token_type":"Bearer","expiry_date":1575366129325
-  },
-  { 
-      "access_token":"ya29.Il-zB2dOLnvxxbwLkVknOF_3N4P508GlgwmGltHFvnkzZDAYMPcIJQyEMGvhf4ui1tZUavYgdb7z17nAUjNxnRA-5TQGjhtZCXWz3exYEtwX-MPNfWh51naX9ZC4tv08FQ",
-    "refresh_token":"1//0gGNe8sIOB1BWCgYIARAAGBASNwF-L9IrtsV5E4Y0FhYJisxKBOhItbXAoPGo2r0hs2k9FOLD3bTX032N-WbQ0UFvjnYmF8DjgOI","scope":"https://www.googleapis.com/auth/drive.metadata.readonly",
-    "token_type":"Bearer",
-    "expiry_date":1575366344048
-  }
+  "./assets/GoogleDrives/jatin345anand/token.json",
+  "./assets/GoogleDrives/javatomcat/token.json",
+  "./assets/GoogleDrives/javascriptangular/token.json",
+  
 ];
 
 // Load client secrets from a local file.
@@ -62,25 +54,35 @@ var Files=[],fname='',fileid='';
 // files/j1.jpg (1emJ1DX3VBeLzKYgtSfJRggtvROl3QAY5)
 // j1.jpg (1vw-dJbWkCvIBupODj1OhAi8nI0xba2TI)
 // GAS Project: Upload a single file multiple Google Drives (17UXOk8TuDMuXABSOmnv-zOwpI3Ndv5u6gOQb2nLKBko)
+oAuthsforDrives=[];
 const CRUDforGoogleDrives = {
   FilesDrives : [],
   UploadOneFile: function (FileName) {
     fileNameMain = FileName;
     console.log('File name is ', FileName, fileNameMain);
-    // for(let i in DrivesDetails){
-    //   // console.log(DrivesDetails[i]);
-    //   authorize(JSON.parse(JSON.stringify(DrivesDetails[i])), uploadFile,JSON.parse(JSON.stringify(DrivesTokenDetails[i])));
-    // }
-    authorize(JSON.parse(JSON.stringify(DrivesDetails[1])), uploadFile,JSON.stringify(DrivesTokenDetails[1]));
+    for(let i in DrivesDetails){
+      oAuthsforDrives.push(authorize(JSON.parse(JSON.stringify(DrivesDetails[i])),DrivesTokenDetails[i]));
+    }
+    for(let i in oAuthsforDrives){
+      console.log(i)
+      uploadFile(oAuthsforDrives[i],FileName);
+    }
+    // authorize(JSON.parse(JSON.stringify(DrivesDetails[1])), uploadFile,JSON.stringify(DrivesTokenDetails[1]));
     // 
   },
   UploadMultipleFile: function () {
 
   },
   ReadAllFiles: function () {
-    
-    authorize(JSON.parse(JSON.stringify(DrivesDetails[2])), listFiles);
-    console.log('in read files',Files);
+    for(let i in DrivesDetails){
+      oAuthsforDrives.push(authorize(JSON.parse(JSON.stringify(DrivesDetails[i])),DrivesTokenDetails[i]));
+    }
+    for(let i in oAuthsforDrives){
+      console.log(i)
+      listFiles(oAuthsforDrives[i]);
+    }
+    // authorize(JSON.parse(JSON.stringify(DrivesDetails[2])), listFiles);
+    // console.log('in read files',Files);
     // this.FilesDrives = Files;
     return Files;
   },
@@ -92,7 +94,7 @@ const CRUDforGoogleDrives = {
   },
   DeleteAllFiles: function () {
 
-  }
+  } 
 }
 
 /**
@@ -101,24 +103,26 @@ const CRUDforGoogleDrives = {
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback, token) {
+function authorize(credentials,tokenAccess) {
   const GoogleAccountName = Object.keys(credentials)[0].toString();
   // console.log('cred.installed  ',Object.values(credentials))
   const { client_secret, client_id, redirect_uris } = Object.values(credentials)[0];
   // console.log(client_secret, client_id, redirect_uris);
   const oAuth2Client = new google.auth.OAuth2(
     client_id, client_secret, redirect_uris[0]);
-    console.log('Token is ',token);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    uploadFile(oAuth2Client);
+    console.log('Token is ',tokenAccess);
+    // oAuth2Client.setCredentials(JSON.parse(token));
+    // uploadFile(oAuth2Client);
     // callback(oAuth2Client);
   // Check if we have previously stored a token.
 
-  // fs.readFile('./assets/GoogleDrives/javascriptangular/token.json', (err, token) => {
-  //   if (err) return getAccessToken(oAuth2Client, callback);
-  //   oAuth2Client.setCredentials(JSON.parse(token));
-  //   callback(oAuth2Client);
-  // });
+  // fs.readFile(TOKEN_PATH, (err, token) => {
+    fs.readFile(tokenAccess, (err, token) => {
+    if (err) return getAccessToken(oAuth2Client, callback);
+    oAuth2Client.setCredentials(JSON.parse(token));
+    // callback(oAuth2Client);
+  });
+  return oAuth2Client;
 }
 
 /**
@@ -178,7 +182,8 @@ function listFiles(auth) {
   });
 }
 function uploadFile(auth, Filename) {
-  const drive = google.drive('v3');
+  console.log('auth in upload',auth);
+  const drive = google.drive({ version: 'v3', auth });
   const fileMetadata = {
     'name': 'public/uploads/myImage-1575204233038.jpeg'
   }
