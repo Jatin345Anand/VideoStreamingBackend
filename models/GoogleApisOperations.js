@@ -59,14 +59,17 @@ const CRUDforGoogleDrives = {
   FilesDrives : [],
   UploadOneFile: function (FileName) {
     fileNameMain = FileName;
-    console.log('File name is ', FileName, fileNameMain);
     for(let i in DrivesDetails){
-      oAuthsforDrives.push(authorize(JSON.parse(JSON.stringify(DrivesDetails[i])),DrivesTokenDetails[i]));
+      authorize(JSON.parse(JSON.stringify(DrivesDetails[i])),DrivesTokenDetails[i],uploadFile);
     }
-    for(let i in oAuthsforDrives){
-      console.log(i)
-      uploadFile(oAuthsforDrives[i],FileName);
-    }
+    // console.log('File name is ', FileName, fileNameMain);
+    // for(let i in DrivesDetails){
+    //   oAuthsforDrives.push(authorize(JSON.parse(JSON.stringify(DrivesDetails[i])),DrivesTokenDetails[i]));
+    // }
+    // for(let i in oAuthsforDrives){
+    //   console.log(i)
+    //   uploadFile(oAuthsforDrives[i],FileName);
+    // }
     // authorize(JSON.parse(JSON.stringify(DrivesDetails[1])), uploadFile,JSON.stringify(DrivesTokenDetails[1]));
     // 
   },
@@ -75,12 +78,12 @@ const CRUDforGoogleDrives = {
   },
   ReadAllFiles: function () {
     for(let i in DrivesDetails){
-      oAuthsforDrives.push(authorize(JSON.parse(JSON.stringify(DrivesDetails[i])),DrivesTokenDetails[i]));
+      authorize(JSON.parse(JSON.stringify(DrivesDetails[i])),DrivesTokenDetails[i],listFiles);
     }
-    for(let i in oAuthsforDrives){
-      console.log(i)
-      listFiles(oAuthsforDrives[i]);
-    }
+    // for(let i in oAuthsforDrives){
+    //   console.log(i)
+    //   listFiles(oAuthsforDrives[i]);
+    // }
     // authorize(JSON.parse(JSON.stringify(DrivesDetails[2])), listFiles);
     // console.log('in read files',Files);
     // this.FilesDrives = Files;
@@ -90,7 +93,7 @@ const CRUDforGoogleDrives = {
     console.log('in delete ',fn,fid);
     fname =fn;
     fileid = fid;
-    authorize(JSON.parse(JSON.stringify(DrivesDetails[2])), DownloadFile);
+    authorize(JSON.parse(JSON.stringify(DrivesDetails[0])),DrivesTokenDetails[0], DownloadFile);
   },
   DeleteAllFiles: function () {
 
@@ -103,11 +106,11 @@ const CRUDforGoogleDrives = {
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials,tokenAccess) {
+function authorize(credentials,tokenAccess,callback) {
   const GoogleAccountName = Object.keys(credentials)[0].toString();
-  // console.log('cred.installed  ',Object.values(credentials))
+  console.log('cred.installed  ',credentials,tokenAccess);
   const { client_secret, client_id, redirect_uris } = Object.values(credentials)[0];
-  // console.log(client_secret, client_id, redirect_uris);
+  console.log(client_secret, client_id, redirect_uris);
   const oAuth2Client = new google.auth.OAuth2(
     client_id, client_secret, redirect_uris[0]);
     console.log('Token is ',tokenAccess);
@@ -120,9 +123,9 @@ function authorize(credentials,tokenAccess) {
     fs.readFile(tokenAccess, (err, token) => {
     if (err) return getAccessToken(oAuth2Client, callback);
     oAuth2Client.setCredentials(JSON.parse(token));
-    // callback(oAuth2Client);
+    callback(oAuth2Client);
   });
-  return oAuth2Client;
+  // return oAuth2Client;
 }
 
 /**
@@ -161,7 +164,7 @@ function getAccessToken(oAuth2Client, callback) {
  * Lists the names and IDs of up to 10 files.
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
-function listFiles(auth) {
+ function listFiles(auth) {
   const drive = google.drive({ version: 'v3', auth });
   drive.files.list({
     pageSize: 10,
@@ -181,7 +184,7 @@ function listFiles(auth) {
     }
   });
 }
-function uploadFile(auth, Filename) {
+function uploadFile(auth) {
   console.log('auth in upload',auth);
   const drive = google.drive({ version: 'v3', auth });
   const fileMetadata = {
@@ -230,66 +233,23 @@ function UploadFileOfficial(auth) {
   });
 }
 function DownloadFile(auth) {
-  // const drive = google.drive('v3');
-  // console.log('in delete main ');
-  // var dest = fs.createWriteStream(fname);
-  // drive.files.get({
-  //   fileId: fileid,
-  //   alt: 'media'
-  // })
-  //   .on('end', function () {
-  //     console.log('Done');
-  //   })
-  //   .on('error', function (err) {
-  //     console.log('Error during download', err);
-  //   })
-  //   .pipe(dest);
+  const returnData = [];
   const drive = google.drive({ version: 'v3', auth });
-  var fileId = '0BwwA4oUTeiV1UVNwOHItT0xfa2M';
-  var destpath = 'C:\\Users\\jatin.anand\\Documents\\NodeJobWork\\GASProject\\public\\downloads\\'+fname+"";
-  console.log(destpath);
-var dest = fs.createWriteStream(destpath);
-// drive.files.get({
-//   fileId: fileId,
-//   alt: 'media'
-// })
-//     .on('end', function () {
-//       console.log('Done');
-//     })
-//     .on('error', function (err) {
-//       console.log('Error during download', err);
-//     })
-//     .pipe(dest);
-    
-    drive.files.get({fileId: fileid, alt: 'media'}, {responseType: 'stream'},
-    function(err, res){
-        res.data
-        .on('end', () => {
-            console.log('Done');
-        })
-        .on('error', err => {
-            console.log('Error', err);
-        })
-        .pipe(dest);
-    }
+  // var dest = fs.createWriteStream('');
+  const file = fs.createWriteStream(fname);
+  drive.files.get({fileId: fileid, alt: 'media'}, {responseType: 'stream'},
+  function(err, res){
+      res.data
+      .on('end', () => {
+          console.log('Done');
+      })
+      .on('error', err => {
+          console.log('Error', err);
+      })
+      .pipe(file);
+  }
 );
-  // const returnData = [];
-  // const drive = google.drive({ version: 'v3', auth });
-
-  // const file = fs.createWriteStream(destination);
-
-  // drive.files.get(
-  // {fileId: fileId, alt: 'media',}, 
-  // {responseType: 'stream'}, (err, { data }) => {
-  //     if (err) {
-  //         returnData.push(["ERR"]);
-  //         returnData.push("" + err);
-  //     } else {
-  //         data.pipe(file);
-  //         returnData.push("Downloaded");
-  //     }
-  //     callback(returnData);
-  // });
+  
 }
 function SearchFile(auth) {
   var pageToken = null;
