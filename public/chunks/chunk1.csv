@@ -1,0 +1,11 @@
+start_ip_in,end_ip_in,continen,countr,country_cod,country_c,regio,stat,state_cod,state_c,cit,city_c,postal_cod,area_cod,time_zon,latitud,longitud,dm,ms,connection_typ,line_spee,ip_routing_typ,as,sl,tl,organizatio,carrie,anonymizer_statu,proxy_typ,proxy_leve,proxy_last_detecte,hosting_facilit
+1677721,1677747,oceani,australi,a,8,"""",new south wale,"""",6,sydne,5,200,"""",1,-33.8671,151.2071,"""","""",t,hig,fixe,1333,on,on,apnic and cloudflare dns resolver projec,cloudflar,"""","""","""","""",fals
+1677747,1677823,asi,chin,c,8,"""",fujia,"""",7,fuzho,6,35000,"""",,26.0627,119.2,"""","""","""","""","""","""","""","""",chinanet fujian province networ,"""","""","""","""","""",fals
+1677824,1677900,oceani,australi,a,9,"""",victori,"""",8,narre warren sout,6,380,"""",1,-38.0500,145.2981,"""","""","""","""","""",5620,bigredgrou,net.a,wirefreebroadband pty lt,gtelecom-australi,"""","""","""","""",fals
+1677900,1677926,oceani,australi,a,9,"""",victori,"""",8,narre warren sout,6,380,"""",1,-38.0500,145.2981,"""","""","""","""","""",5620,"""","""",wirefreebroadband pty lt,gtelecom-australi,"""","""","""","""",fals
+1677926,1678131,asi,chin,c,8,"""",guangdon,"""",7,guangzho,6,51000,"""",,23.1247,113.2386,"""","""","""","""","""","""","""","""",chinanet guangdong province networ,"""","""","""","""","""",fals
+1678131,1678156,asi,japa,j,9,"""",toky,"""",8,shinjuku-k,6,160-002,"""",,35.6947,139.7027,"""","""","""","""","""",251,tepc,co.j,i2ts inc,arteria networks corporatio,"""","""","""","""",fals
+1678156,1678540,asi,japa,j,8,"""",toky,"""",7,shinjuku-k,6,160-002,"""",,35.6947,139.7027,"""","""","""","""","""","""","""","""",i2ts inc,"""","""","""","""","""",fals
+1678540,1678694,asi,chin,c,8,"""",guangdon,"""",7,guangzho,6,51000,"""",,23.1247,113.2386,"""","""","""","""","""","""","""","""",chinanet guangdong province networ,"""","""","""","""","""",fals
+1678694,1678719,asi,chin,c,8,"""",guangdon,"""",7,guangzho,6,51000,"""",,23.1247,113.2386,"""","""",t,hig,fixe,"""","""","""",chinanet guangdong province networ,"""","""","""","""","""",fals
+1678720,1679359,asi,chin,c,8,"""",guangdon,"""",7,guangzho,6,51000,"""",,23.1247,113.2386,"""","""","""","""","""","""","""","""",chinanet guangdong province networ,"""","""","""","""","""",fals

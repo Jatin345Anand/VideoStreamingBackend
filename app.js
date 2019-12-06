@@ -80,8 +80,12 @@ if(req.body.read){
 //    console.log(typeof Files);
 }
 if(req.body.delete){
-   CRUDforGoogleDrive.DeleteOneFile(req.body.fn,req.body.fid);
+   CRUDforGoogleDrive.DeleteOneFiles(req.body.fn,req.body.fid);
 }
+
+if(req.body.download){
+    CRUDforGoogleDrive.DownloadOneFile(req.body.fn,req.body.fid);
+ }
 });
 app.post('/upload', (req, res) => {
     // res.send('sent');

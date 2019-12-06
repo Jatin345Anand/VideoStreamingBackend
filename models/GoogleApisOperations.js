@@ -89,13 +89,17 @@ const CRUDforGoogleDrives = {
     // this.FilesDrives = Files;
     return Files;
   },
-  DeleteOneFile: function (fn,fid) {
+  DownloadOneFile: function (fn,fid) {
     console.log('in delete ',fn,fid);
     fname =fn;
     fileid = fid;
     authorize(JSON.parse(JSON.stringify(DrivesDetails[0])),DrivesTokenDetails[0], DownloadFile);
   },
-  DeleteAllFiles: function () {
+  DeleteOneFiles: function (fn,fid) {
+    console.log('in delete ',fn,fid);
+    fname =fn;
+    fileid = fid;
+    authorize(JSON.parse(JSON.stringify(DrivesDetails[0])),DrivesTokenDetails[0], DeleteFile);
 
   } 
 }
@@ -250,6 +254,26 @@ function DownloadFile(auth) {
   }
 );
   
+}
+function DeleteFile(auth){
+  const drive = google.drive({ version: 'v3', auth });
+  const file = fs.createWriteStream(fname);
+  var request = drive.files.delete({
+    'fileId': fileid
+  });
+  console.log('done');
+  // request.execute(function(resp) { });
+  // drive.files.get({fileId: fileid, alt: 'media'}, {responseType: 'stream'},
+  // function(err, res){
+  //     res.data
+  //     .on('end', () => {
+  //         console.log('Done');
+  //     })
+  //     .on('error', err => {
+  //         console.log('Error', err);
+  //     })
+  //     .pipe(file);
+  // }
 }
 function SearchFile(auth) {
   var pageToken = null;
